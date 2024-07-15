@@ -1,0 +1,20 @@
+/*
+ * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
+ * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Interface.java to edit this template
+ */
+package com.dos.contrat;
+
+import java.util.List;
+
+/**
+ *
+ * @author andri
+ * @param <T> the Entity
+ * @param <I> the Id Type
+ */
+public interface IDAO<T extends IEntity<I>,I extends Object> {
+    public I save(T object) throws Exception;
+    public List<T> getAll(Class<T> classObject) throws Exception;
+    public T update(I id,T newdata) throws Exception;
+    public T getById(I id,Class<T> instance) throws Exception;
+}
