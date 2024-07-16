@@ -4,15 +4,12 @@
  */
 package com.dos.contrat;
 
-import java.util.List;
-
 /**
  *
  * @author andri
  * @param <T>
- * @param <C> criteria Builder
  */
-public interface IMouvementFactory<T extends IEntity<Long>,C> {
+public interface IMouvementFactory<T extends IEntity<Long>> {
     public T addMouvement(T mouvement) throws Exception;
     public boolean checkIfMouvementAlreadyExists(T mouvement) throws Exception;
 }

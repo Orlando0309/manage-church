@@ -11,7 +11,7 @@ import org.hibernate.query.Query;
 import org.springframework.stereotype.Service;
 
 @Service
-public class MouvementFactory extends ServiceFactory<Mouvement,Long> implements IMouvementFactory<Mouvement, Object> {
+public class MouvementFactory extends ServiceFactory<Mouvement,Long> implements IMouvementFactory<Mouvement> {
 
     @Override
     public Mouvement addMouvement(Mouvement mouvement) throws Exception {
@@ -22,6 +22,9 @@ public class MouvementFactory extends ServiceFactory<Mouvement,Long> implements 
 
     @Override
     public boolean checkIfMouvementAlreadyExists(Mouvement mouvement) throws Exception {
+        if(mouvement==null){
+            throw new IllegalArgumentException("Null parameter given to checkIfMouvementAlreadyExists method");
+        }
         try (Session session = factory.openSession()) {
             StringBuilder queryString = new StringBuilder("SELECT COUNT(*) FROM mouvement WHERE 1=1");
 
