@@ -9,7 +9,8 @@ package com.dos.contrat;
  * @author andri
  * @param <T>
  */
-public interface IMouvementFactory<T extends IEntity<Long>> {
+public interface IMouvementFactory<T extends IEntity<Long>> extends IDAO<T,Long>{
     public T addMouvement(T mouvement) throws Exception;
     public boolean checkIfMouvementAlreadyExists(T mouvement) throws Exception;
+
 }
