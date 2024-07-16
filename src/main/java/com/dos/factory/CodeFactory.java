@@ -23,7 +23,6 @@ public class CodeFactory extends ServiceFactory<CodeMouvement,Long> implements I
     public CodeMouvement getCodeInfo(String code) throws Exception {
         CodeMouvement codeRetour;
         try (Session session = factory.openSession()) {
-            System.out.println("code="+code);
             CriteriaBuilder cb = session.getCriteriaBuilder();
             CriteriaQuery<CodeMouvement> cq = cb.createQuery(CodeMouvement.class);
             Root<CodeMouvement> rootEntry = cq.from(CodeMouvement.class);

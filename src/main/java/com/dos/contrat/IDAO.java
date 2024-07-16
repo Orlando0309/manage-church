@@ -4,7 +4,10 @@
  */
 package com.dos.contrat;
 
+import jakarta.persistence.criteria.CriteriaQuery;
+
 import java.util.List;
+import java.util.function.Consumer;
 
 /**
  *
@@ -17,4 +20,6 @@ public interface IDAO<T extends IEntity<I>,I extends Object> {
     public List<T> getAll(Class<T> classObject) throws Exception;
     public T update(I id,T newdata) throws Exception;
     public T getById(I id,Class<T> instance) throws Exception;
+    public List<T> filter(Consumer<CriteriaQuery<T>> criteriaConsumer, Class<T> instance) throws Exception;
+    public <F> F getFactory();
 }

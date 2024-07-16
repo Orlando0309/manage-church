@@ -11,6 +11,8 @@ import jakarta.persistence.criteria.CriteriaBuilder;
 import jakarta.persistence.criteria.CriteriaQuery;
 import jakarta.persistence.criteria.Root;
 import java.util.List;
+import java.util.function.Consumer;
+
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -89,5 +91,18 @@ public class ServiceFactory<T extends IEntity<I>,I extends Object> implements ID
         }
         return retour;
     }
-    
+
+    @Override
+    public List<T> filter(Consumer<CriteriaQuery<T>> criteriaConsumer, Class<T> instance) throws Exception {
+        List<T> resultList;
+        try (Session session = factory.openSession()) {
+            CriteriaBuilder cb = session.getCriteriaBuilder();
+            CriteriaQuery<T> cq = cb.createQuery(instance);
+            criteriaConsumer.accept(cq);
+            resultList = session.createQuery(cq).getResultList();
+        }
+        return resultList;
+    }
+
+
 }

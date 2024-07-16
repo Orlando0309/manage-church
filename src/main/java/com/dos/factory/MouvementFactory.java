@@ -10,7 +10,7 @@ import org.hibernate.Session;
 import org.hibernate.query.Query;
 import org.springframework.stereotype.Service;
 
-@Service
+@Service("mouvementfactory")
 public class MouvementFactory extends ServiceFactory<Mouvement,Long> implements IMouvementFactory<Mouvement> {
 
     @Override
