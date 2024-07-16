@@ -6,21 +6,18 @@ package com.dos.factory;
 
 import com.dos.contrat.IAdidyFactory;
 import com.dos.contrat.IStateFactory;
-import com.dos.model.Adidy;
 import com.dos.model.AdidyAnnee;
 import com.dos.model.AdidyView;
-import com.dos.model.Code;
 import com.dos.model.CodeMouvement;
 import com.dos.model.Mouvement;
-import java.math.BigDecimal;
-import java.time.LocalDate;
 import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Data;
 import lombok.NoArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
+
+import java.math.BigDecimal;
+import java.time.LocalDate;
 
 /**
  *
@@ -41,6 +38,8 @@ public class AdidyFactory extends ServiceFactory<AdidyView, Long> implements IAd
     @Autowired
     private  AdidyAnneeFactory adfactory;
 
+
+
     @Override
     public AdidyView persistAdidy(AdidyView adidy, String code, LocalDate date) throws Exception {
         CodeMouvement codeValue = codefactory.getCodeInfo(code);
@@ -48,7 +47,8 @@ public class AdidyFactory extends ServiceFactory<AdidyView, Long> implements IAd
         mouvement.setMontant(BigDecimal.valueOf(adidy.getMontant()));
         mouvement.setDatemouvement(date);
         mouvement.setCodemouvement(codeValue.getId().intValue());
-        mvfactory.addMouvement(mouvement);
+        if(!mvfactory.checkIfMouvementAlreadyExists(mouvement))
+            mvfactory.addMouvement(mouvement);
         boolean isUpdated = this.updateState(adidy, 1);
         if (isUpdated) {
             adidy.setEtat(1);
@@ -64,7 +64,6 @@ public class AdidyFactory extends ServiceFactory<AdidyView, Long> implements IAd
         AdidyAnnee newData = new AdidyAnnee();
         newData.setEtat(state);
         newData.setId(stateowner.getId());
-        System.out.println("stateowner "+stateowner.toString());
         AdidyAnnee retour = adfactory.update(stateowner.getId(), newData);
         return retour != null;
     }

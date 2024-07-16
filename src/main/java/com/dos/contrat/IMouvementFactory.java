@@ -12,7 +12,7 @@ import java.util.List;
  * @param <T>
  * @param <C> criteria Builder
  */
-public interface IMouvementFactory<T extends IEntity<Long>,C extends Object> {
+public interface IMouvementFactory<T extends IEntity<Long>,C> {
     public T addMouvement(T mouvement) throws Exception;
-    public List<T> getMouvement(C criteria) throws Exception;
+    public boolean checkIfMouvementAlreadyExists(T mouvement) throws Exception;
 }
