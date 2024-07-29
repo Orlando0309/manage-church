@@ -6,10 +6,13 @@ package com.dos.factory;
 
 import com.dos.contrat.IDAO;
 import com.dos.contrat.IEntity;
+import com.dos.factory.RootFactory;
 import com.dos.util.ManagerUtils;
 import jakarta.persistence.criteria.CriteriaBuilder;
 import jakarta.persistence.criteria.CriteriaQuery;
 import jakarta.persistence.criteria.Root;
+
+import java.util.ArrayList;
 import java.util.List;
 import java.util.function.Consumer;
 
@@ -29,14 +32,10 @@ import org.springframework.beans.factory.annotation.Autowired;
  * @param <I>
  */
 @NoArgsConstructor
-@AllArgsConstructor
-@Data
 @Builder
-public class ServiceFactory<T extends IEntity<I>,I extends Object> implements IDAO<T,I> {
+public class ServiceFactory<T extends IEntity<I>,I> extends RootFactory implements IDAO<T,I> {
     
-    @Autowired
-    SessionFactory factory;
-    
+
     @Override
     public I save(T object) throws Exception {
          SessionFactory f=this.getFactory();
@@ -44,7 +43,37 @@ public class ServiceFactory<T extends IEntity<I>,I extends Object> implements ID
          Transaction transaction=session.beginTransaction();
         I id =(I) session.save(object);
          transaction.commit();
+
          return id;
+    }
+
+    @Override
+    public List<I> saveMany(T... objects) throws Exception {
+        List<I> ids = new ArrayList<>();
+        Session session = factory.openSession();
+        Transaction transaction = session.beginTransaction();
+
+        try {
+            for (int i = 0; i < objects.length; i++) {
+                T object = objects[i];
+                I id = (I) session.save(object);
+                ids.add(id);
+
+                // Flush and clear the session periodically to avoid memory issues
+                if (i % 20 == 0) {
+                    session.flush();
+                    session.clear();
+                }
+            }
+            transaction.commit();
+        } catch (Exception e) {
+            transaction.rollback();
+            throw e;
+        } finally {
+            session.close();
+        }
+
+        return ids;
     }
 
     @Override
@@ -103,6 +132,9 @@ public class ServiceFactory<T extends IEntity<I>,I extends Object> implements ID
         }
         return resultList;
     }
+
+
+
 
 
 }

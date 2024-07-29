@@ -10,6 +10,10 @@ import org.hibernate.Session;
 import org.hibernate.query.Query;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
+
 @Service("mouvementfactory")
 public class MouvementFactory extends ServiceFactory<Mouvement,Long> implements IMouvementFactory<Mouvement> {
 
@@ -18,6 +22,12 @@ public class MouvementFactory extends ServiceFactory<Mouvement,Long> implements 
         Long savedMouvementId= this.save(mouvement);
         mouvement.setId(savedMouvementId);
         return mouvement;
+    }
+
+    @Override
+    public boolean addManyMouvement(Mouvement... mouvement) throws Exception {
+        List<Long> savedData=this.saveMany(mouvement);
+        return savedData.size()== mouvement.length;
     }
 
     @Override

@@ -4,6 +4,8 @@
  */
 package com.dos.contrat;
 
+import java.util.List;
+
 /**
  *
  * @author andri
@@ -11,6 +13,7 @@ package com.dos.contrat;
  */
 public interface IMouvementFactory<T extends IEntity<Long>> extends IDAO<T,Long>{
     public T addMouvement(T mouvement) throws Exception;
+    public boolean addManyMouvement(T... mouvement) throws Exception;
     public boolean checkIfMouvementAlreadyExists(T mouvement) throws Exception;
 
 }

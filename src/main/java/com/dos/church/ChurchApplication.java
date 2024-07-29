@@ -7,7 +7,7 @@ import org.springframework.context.annotation.ComponentScan;
 import terminal.Terminal;
 
 @SpringBootApplication
-@ComponentScan({"com.dos.controller","com.dos.factory","com.dos.services"})
+@ComponentScan({"com.dos.controller","com.dos.factory","com.dos.services","com.dos.filter"})
 @EntityScan(basePackages = "com.dos.model")
 public class ChurchApplication {
 

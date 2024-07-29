@@ -4,16 +4,18 @@
  */
 package com.dos.controller;
 
+import com.dos.church.HttpSuccessResponse;
+import com.dos.church.HttpErrorResponse;
+import com.dos.church.HttpResult;
+import com.dos.contrat.ICodeFactory;
+import com.dos.contrat.IDAO;
 import com.dos.model.Code;
-import com.dos.services.CodeService;
-import java.util.List;
-import java.util.logging.Level;
-import java.util.logging.Logger;
-import lombok.AllArgsConstructor;
+import com.dos.model.CodeMouvement;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
 
 /**
  *
@@ -21,18 +23,44 @@ import org.springframework.web.bind.annotation.RestController;
  */
 @RestController
 @RequestMapping("/api/code")
-@AllArgsConstructor
+@CrossOrigin(origins="*")
 public class CodeController {
+    ICodeFactory<CodeMouvement> codeFactory;
+
     @Autowired
-    final CodeService codeservice;
-    
+    IDAO<Code,Long> rootCodeFactory;
+
+    public CodeController(@Qualifier("mouvementcodefactory") ICodeFactory<CodeMouvement> codeFactory) {
+        this.codeFactory = codeFactory;
+    }
+
+    @GetMapping("/root")
+    public HttpResult<List<Code>> getList(){
+        try{
+            List<Code> data=rootCodeFactory.getAll(Code.class);
+            return new HttpSuccessResponse<>(data,"Found "+data.size());
+        }catch(Exception ex){
+            return new HttpErrorResponse<>(null,ex.getMessage());
+        }
+    }
+
+    @PostMapping
+    public HttpResult<CodeMouvement> saveOne(@RequestBody CodeMouvement code){
+        try{
+            Long id=codeFactory.save(code);
+            code.setId(id);
+            return new HttpSuccessResponse<>(code,"Saved Successfully!");
+        }catch(Exception ex){
+            return new HttpErrorResponse<>(null,ex.getMessage());
+        }
+    }
     @GetMapping
-    public List<Code> get(){
-        try {
-            return codeservice.getAll(Code.class);
-        } catch (Exception ex) {
-            Logger.getLogger(CodeController.class.getName()).log(Level.SEVERE, null, ex);
-            return null;
+    public HttpResult<List<CodeMouvement>> searchCode(@RequestParam String q){
+        try{
+            List<CodeMouvement> dataResult=codeFactory.findByCode(q);
+            return new HttpSuccessResponse<>(dataResult,"Found "+dataResult.size());
+        }catch (Exception ex){
+            return new HttpErrorResponse<>(null,ex.getMessage());
         }
     }
 }

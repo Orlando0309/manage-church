@@ -15,7 +15,7 @@ import terminal.Terminal;
 public class ManagerUtils {
     public static void transmute(Object taloha, Object vaovao) throws Exception {
         HashMap<String, Object> values = Terminal.values(vaovao);
-        String[] fields = values.keySet().toArray(new String[values.size()]);
+        String[] fields = values.keySet().toArray(new String[0]);
         Method[] met = Terminal.setters2(taloha, fields);
         for (int i = 0; i < values.size(); i++) {
             if (values.get(fields[i]) != null) {

@@ -15,7 +15,7 @@ import java.util.List;
 @Service("mouvementViewService")
 public class MouvementViewService extends ServiceFactory<MouvementView,Long> implements IMouvementViewService<MouvementView> {
     @Override
-    public void filterByFluxAndYear(CriteriaQuery<MouvementView> cq,String flux,Integer year) {
+    public void filterByFluxAndYearAndMonth(CriteriaQuery<MouvementView> cq, String flux, Integer year,Integer   month) {
         try(Session session=factory.openSession()){
             CriteriaBuilder cb = session.getCriteriaBuilder();
             Root<MouvementView> root = cq.from(MouvementView.class);
@@ -27,6 +27,9 @@ public class MouvementViewService extends ServiceFactory<MouvementView,Long> imp
             }
             if(year!=null){
                 predicates.add(cb.equal(root.get("anneemouvement"),year));
+            }
+            if(month!=null){
+                predicates.add(cb.equal(root.get("monthmouvement"),month));
             }
             cq.where(predicates.toArray(new Predicate[0]));
             cq.select(root);
