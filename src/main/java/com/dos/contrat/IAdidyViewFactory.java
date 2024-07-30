@@ -12,6 +12,6 @@ import java.util.List;
  * @param <T>
  * @param <S>
  */
-public interface IAdidyViewFactory<T extends IEntity<Long>,S extends Object> extends IAdidyFactory<T> {
+public interface IAdidyViewFactory<T extends IEntity<Long>,S> extends IAdidyFactory<T> {
     public List<T> getAdidy(Integer annee, S state) throws Exception;
 }
