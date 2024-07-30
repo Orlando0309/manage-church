@@ -16,4 +16,6 @@ public class Constante {
     public static final int ADIDY_CODE=3;
     public static final String HTTP_ERROR="HTTP_ERROR";
     public static final String HTTP_SUCCESS="HTTP_SUCCESS";
+    public static  final  String MD="MIDITRA";
+    public static  final String MV="MIVOAKA";
 }

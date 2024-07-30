@@ -11,13 +11,15 @@ import jakarta.persistence.criteria.CriteriaBuilder;
 import jakarta.persistence.criteria.CriteriaQuery;
 import jakarta.persistence.criteria.Root;
 import java.util.HashMap;
+import java.util.List;
+
 import lombok.AllArgsConstructor;
 import org.hibernate.Session;
 import org.springframework.stereotype.Service;
 
 @AllArgsConstructor
 @Service("mouvementcodefactory")
-public class CodeFactory extends ServiceFactory<CodeMouvement,Long> implements ICodeFactory<CodeMouvement>,IDAO<CodeMouvement,Long> {
+public class CodeFactory extends ServiceFactory<CodeMouvement,Long> implements ICodeFactory<CodeMouvement>{
 
     @Override
     public CodeMouvement getCodeInfo(String code) throws Exception {
@@ -38,6 +40,24 @@ public class CodeFactory extends ServiceFactory<CodeMouvement,Long> implements I
         if(codeRetour==null)
             throw new Exception("The provided code does not exist");
         return codeRetour;
+    }
+
+    @Override
+    public List<CodeMouvement> findByCode(String str) throws Exception {
+        List<CodeMouvement> searchResult;
+        try(Session session= factory.openSession()){
+            CriteriaBuilder cb= session.getCriteriaBuilder();
+            String sb = str+"%";
+            CriteriaQuery<CodeMouvement> cq=cb.createQuery(CodeMouvement.class);
+            Root<CodeMouvement> rootEntry=cq.from(CodeMouvement.class);
+            cq.select(rootEntry);
+
+            cq.where(
+              cb.like(rootEntry.get("code"), sb)
+            );
+            searchResult=session.createQuery(cq).getResultList();
+        }
+        return searchResult;
     }
 
     @Override

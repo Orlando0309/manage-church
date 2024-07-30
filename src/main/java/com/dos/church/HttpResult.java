@@ -18,7 +18,7 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @NoArgsConstructor
 @Data
-public class HttpResult<T extends Object> {
+public class HttpResult<T> {
     T data;
     String status;
     String message;

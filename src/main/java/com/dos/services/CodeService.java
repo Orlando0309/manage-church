@@ -4,6 +4,7 @@
  */
 package com.dos.services;
 
+import com.dos.contrat.IDAO;
 import com.dos.factory.ServiceFactory;
 import com.dos.model.Code;
 import org.springframework.stereotype.Service;
@@ -13,6 +14,6 @@ import org.springframework.stereotype.Service;
  * @author andri
  */
 @Service
-public class CodeService extends ServiceFactory<Code,Long> {
+public class CodeService extends ServiceFactory<Code,Long> implements IDAO<Code,Long> {
     
 }
